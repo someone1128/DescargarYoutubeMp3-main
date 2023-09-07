@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useRef, useState } from "react"
 import { youtube_parser } from "./utils";
+import Footer from "./components/Footer.jsx";
 
 function App() {
   const inputUrlRef = useRef();
   const [urlResult, setUrlResult] = useState(null);
+  const [hint, setHint] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -22,9 +24,17 @@ function App() {
         id: youtubeID
       }
     }
+    // 发送请求
+    setHint("Please wait for 5-10 seconds")
     axios(options)
-      .then(res => setUrlResult(res.data.link))
-      .catch(err => console.log(err))
+        .then(res => {
+          setUrlResult(res.data.link)
+          setHint(null)
+        })
+      .catch(err => {
+        console.log(err)
+        setHint("There seems to be a slight anomaly, please try again later")
+      })
 
     inputUrlRef.current.value = '';
 
@@ -44,13 +54,11 @@ function App() {
           <button type="submit" className="form_button">Procesar</button>
         </form>
 
-        {urlResult ? <a target='_blank' rel="noreferrer" href={urlResult} className="download_btn">Download MP3</a> : ''}
+        {hint ? <span rel="noreferrer" className="download_btn">hint</span> : <span className="download_btn"></span>}
+        {urlResult ? <a target='_blank' rel="noreferrer" href={urlResult} className="download_btn">Download MP3</a> : <span className="download_btn"></span>}
 
       </section>
-      <div className="footer">
-        <a href="https://code.aiconver.cn/" target="_blank" rel="noopener noreferrer">Code Converter</a>
-        <a href="https://base64.aiconver.cn/" target="_blank" rel="noopener noreferrer">Base64 Converter</a>
-      </div>
+      <Footer />
     </div>
   )
 }

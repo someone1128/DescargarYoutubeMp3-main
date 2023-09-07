@@ -71,11 +71,11 @@ body {
   outline: none;
   color: white;
   cursor: pointer;
-  margin-bottom: 3rem;
   border-radius: 3px;
 }
 
 .download_btn {
+  margin-bottom: 3rem;
   color: white;
 }
 
